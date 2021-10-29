@@ -1,0 +1,61 @@
+### CONFIG ###
+
+# PROGRAMS
+CC=gcc
+RM=rm -rf
+MKDIR=mkdir -p
+ASTYLE=astyle
+
+# DIRECTORIES
+OBJ_DIR=.obj
+SRC_DIR=src
+DEP_DIR=$(OBJ_DIR)/.dep
+
+# FLAGS
+DEPFLAGS=-MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
+CFLAGS=-g -std=c11 -Werror -Wall -Wextra
+LDFLAGS=
+
+# PROGRAM
+NAME=dynarr_test
+TEST_ARGS=
+
+### PHONY ###
+
+.PHONY: all run debug clean format dirs
+
+all: $(OBJ_DIR)/$(NAME)
+
+run: all
+	./$(OBJ_DIR)/$(NAME) $(TEST_ARGS)
+
+debug: all
+	@echo "not implemented yet"
+
+format:
+	$(ASTYLE) --style=linux --indent=tab --suffix=none \
+		--max-code-length=80 \
+		$(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.h)
+
+clean:
+	$(RM) $(OBJS) $(DEPS) $(OBJ_DIR)/$(NAME)
+
+### RULES ###
+
+SRCS=$(wildcard $(SRC_DIR)/*.c)
+OBJS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o, $(SRCS))
+DEPS=$(patsubst $(SRC_DIR)/%.c,$(DEP_DIR)/%.d, $(SRCS))
+
+dirs: ; @$(MKDIR) $(OBJ_DIR) $(DEP_DIR)
+
+$(OBJ_DIR)/$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(DEPFLAGS) $(LDFLAGS) -o $(OBJ_DIR)/$(NAME) $(OBJS)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(DEP_DIR)/%.d | dirs
+	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
+
+# include dependency files without failing on missing ones
+$(DEPS):
+include $(wildcard $(DEPS))
+
+# vim: ft=make noet tw=80
