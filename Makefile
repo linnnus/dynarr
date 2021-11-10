@@ -10,10 +10,11 @@ ASTYLE=astyle
 OBJ_DIR=.obj
 SRC_DIR=src
 DEP_DIR=$(OBJ_DIR)/.dep
+INCLUDE_DIR=include
 
 # FLAGS
 DEPFLAGS=-MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
-CFLAGS=-g -std=c11 -Werror -Wall -Wextra
+CFLAGS=-g -std=c11 -Werror -Wall -Wextra -I$(INCLUDE_DIR)
 LDFLAGS=
 
 # PROGRAM
@@ -22,11 +23,11 @@ TEST_ARGS=
 
 ### PHONY ###
 
-.PHONY: all run debug clean format dirs
+.PHONY: all test debug clean format dirs
 
 all: $(OBJ_DIR)/$(NAME)
 
-run: all
+test: all
 	./$(OBJ_DIR)/$(NAME) $(TEST_ARGS)
 
 debug: all

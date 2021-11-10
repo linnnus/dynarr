@@ -1,9 +1,9 @@
 #ifndef DYNARR_H
 #define DYNARR_H
 
-// TODO: add more macros like push_rval?
 // TODO: let user set malloc/realloc/free
 // TODO: messsages with assert macro?
+// TODO: handle max size
 
 #include <assert.h> // assert
 #include <stddef.h> // size_t
@@ -22,6 +22,18 @@
 	do { \
 		__auto_type tmp = val; \
 		dynarr_push(arr, &tmp); \
+	} while (0)
+
+#define dynarr_set_rval(arr, idx, val) \
+	do { \
+		__auto_type tmp = val; \
+		dynarr_set(arr, idx, &tmp); \
+	} while (0)
+
+#define dynarr_insert_rval(arr, idx, val) \
+	do { \
+		__auto_type tmp = val; \
+		dynarr_insert(arr, idx, &tmp); \
 	} while (0)
 
 typedef struct {

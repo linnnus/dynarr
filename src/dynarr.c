@@ -50,7 +50,6 @@ void *dynarr_pop_ptr(dynarr_t *arr)
 	assert(arr  != NULL);
 	assert(arr->_count > 0);
 
-	// TODO: resize downwards if (count == cap / 2) or smth
 	--arr->_count;
 	return arr->_data + (arr->_count * arr->_elt_size);
 }
@@ -67,8 +66,11 @@ void dynarr_pop(dynarr_t *arr, void *dest)
 void dynarr_set(dynarr_t *arr, size_t idx, void *src)
 {
 	assert(arr != NULL);
-	assert(idx < arr->_count);
+	assert(idx < arr->_cap);
 	assert(src != NULL);
+
+	if (idx > arr->_count)
+		arr->_count = idx + 1;
 
 	memcpy(arr->_data + (idx * arr->_elt_size), src, arr->_elt_size);
 }
