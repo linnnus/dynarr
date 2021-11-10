@@ -1,15 +1,6 @@
 #include <stdio.h>
 #include "dynarr.h"
 
-// TODO: testing
-
-#define dynarr_pop_f(arr, type) \
-	({ \
-		type __tmp; \
-		dynarr_pop(arr, &__tmp); \
-		__tmp; \
-	})
-
 #define DBG(...) (fprintf(stderr, __VA_ARGS__), fflush(stderr))
 
 int main()
@@ -25,7 +16,7 @@ int main()
 
 	DBG("========\n");
 
-	int tmp = dynarr_pop_f(arr, int);
+	int tmp = *(int *) dynarr_pop_ptr(arr);
 
 	DBG("count before pop: %zu\n", dynarr_count(arr));
 	// int tmp;

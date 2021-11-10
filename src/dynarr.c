@@ -45,17 +45,23 @@ void dynarr_push(dynarr_t *arr, void *src)
 
 }
 
+void *dynarr_pop_ptr(dynarr_t *arr)
+{
+	assert(arr  != NULL);
+	assert(arr->_count > 0);
+
+	// TODO: resize downwards if (count == cap / 2) or smth
+	--arr->_count;
+	return arr->_data + (arr->_count * arr->_elt_size);
+}
+
 void dynarr_pop(dynarr_t *arr, void *dest)
 {
 	assert(arr  != NULL);
 	assert(dest != NULL);
 	assert(arr->_count > 0);
 
-	--arr->_count;
-	memcpy(dest, arr->_data + (arr->_count * arr->_elt_size),
-	       arr->_elt_size);
-
-	// TODO: resize downwards if (count == cap / 2) or smth
+	memcpy(dest, dynarr_pop_ptr(arr), arr->_elt_size);
 }
 
 void dynarr_set(dynarr_t *arr, size_t idx, void *src)
@@ -65,6 +71,14 @@ void dynarr_set(dynarr_t *arr, size_t idx, void *src)
 	assert(src != NULL);
 
 	memcpy(arr->_data + (idx * arr->_elt_size), src, arr->_elt_size);
+}
+
+void *dynarr_get_ptr(dynarr_t *arr, size_t idx)
+{
+	assert(arr != NULL);
+	assert(idx < arr->_count);
+
+	return arr->_data + idx * arr->_elt_size;
 }
 
 void dynarr_get(dynarr_t *arr, size_t idx, void *dest)
