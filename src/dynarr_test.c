@@ -133,7 +133,7 @@ static void test_set_size_t()
 static void test_set_struct()
 {
 	dynarr_t *arr = dynarr_init_count(sizeof(struct test_struct),
-			TEST_COUNT);
+	                                  TEST_COUNT);
 
 	TEST_CHECK(dynarr_count(arr) == 0);
 	TEST_MSG("Count should be initialized to 0");
@@ -167,11 +167,15 @@ static void test_dynarr_insert()
 	dynarr_t *arr = dynarr_init(sizeof(size_t));
 
 	size_t tmp;
-	tmp = 0; dynarr_push(arr, &tmp);
-	tmp = 1; dynarr_push(arr, &tmp);
-	tmp = 3; dynarr_push(arr, &tmp);
+	tmp = 0;
+	dynarr_push(arr, &tmp);
+	tmp = 1;
+	dynarr_push(arr, &tmp);
+	tmp = 3;
+	dynarr_push(arr, &tmp);
 
-	tmp = 2; dynarr_insert(arr, 2, &tmp);
+	tmp = 2;
+	dynarr_insert(arr, 2, &tmp);
 
 	for (size_t i = 0; i < 4; ++i) {
 		size_t tmp;

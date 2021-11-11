@@ -35,8 +35,8 @@ void dynarr_push(dynarr_t *arr, void *src)
 	// ensure enough space
 	if (arr->_cap < (arr->_count + 1))
 		dynarr_resize(arr, arr->_cap == 0
-				? DYNARR_DEFAULT_CAP
-				: arr->_cap * DYNARR_RESIZE_FACTOR);
+		              ? DYNARR_DEFAULT_CAP
+		              : arr->_cap * DYNARR_RESIZE_FACTOR);
 
 	// copy element
 	memcpy(arr->_data + (arr->_count * arr->_elt_size),
@@ -101,8 +101,8 @@ void dynarr_insert(dynarr_t *arr, size_t idx, void *src)
 	// ensure enough space
 	if (arr->_cap < (arr->_count + 1))
 		dynarr_resize(arr, arr->_cap == 0
-				? DYNARR_DEFAULT_CAP
-				: arr->_cap * DYNARR_RESIZE_FACTOR);
+		              ? DYNARR_DEFAULT_CAP
+		              : arr->_cap * DYNARR_RESIZE_FACTOR);
 
 	// cpy elements from idx to end one longer
 	memcpy(arr->_data + (idx + 1) * arr->_elt_size,
