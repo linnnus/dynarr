@@ -133,4 +133,11 @@ size_t dynarr_count(dynarr_t *arr)
 	return arr->_count;
 }
 
+void *dynarr_data(dynarr_t *arr)
+{
+	assert(arr != NULL);
+
+	return arr->_data;
+}
+
 // vim: ft=c noet tw=80

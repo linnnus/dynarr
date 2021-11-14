@@ -200,6 +200,20 @@ static void test_dynarr_resize()
 	TEST_CHECK(dynarr_count(arr) == 5);
 }
 
+static void test_dynarr_count()
+{
+	dynarr_t *arr = dynarr_init_count(sizeof(int), 10);
+
+	TEST_CHECK(arr->_count == dynarr_count(arr));
+}
+
+static void test_dynarr_data()
+{
+	dynarr_t *arr = dynarr_init_count(sizeof(int), 10);
+
+	TEST_CHECK(arr->_data == dynarr_data(arr));
+}
+
 TEST_LIST = {
 	{ "dynarr_init_count", test_dynarr_init_count },
 	{ "pushing/popping size_t", test_push_size_t },
@@ -210,5 +224,7 @@ TEST_LIST = {
 	{ "setting/getting struct", test_set_struct },
 	{ "dynarr_insert", test_dynarr_insert },
 	{ "dynarr_resize", test_dynarr_resize },
+	{ "dynarr_count", test_dynarr_count },
+	{ "dynarr_data", test_dynarr_data },
 	{ NULL, NULL }
 };

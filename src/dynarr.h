@@ -57,6 +57,7 @@ void  dynarr_get(dynarr_t *arr, size_t idx, void *dest);
 void  dynarr_insert(dynarr_t *arr, size_t idx, void *src);
 
 size_t dynarr_count(dynarr_t *arr);
+void *dynarr_data(dynarr_t *arr);
 
 #endif
 
