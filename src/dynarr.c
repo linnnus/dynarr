@@ -19,6 +19,18 @@ dynarr_t *dynarr_init(size_t element_size)
 	return dynarr_init_count(element_size, DYNARR_DEFAULT_CAP);
 }
 
+void dynarr_resize(dynarr_t *arr, size_t new_cap)
+{
+	assert(arr != NULL);
+
+	arr->_cap = new_cap;
+	if (new_cap < arr->_count)
+		arr->_count = new_cap;
+
+	arr->_data = realloc(arr->_data, arr->_cap * arr->_elt_size);
+	assert(arr->_data != NULL);
+}
+
 void dynarr_free(dynarr_t *arr)
 {
 	if (arr == NULL) return;
@@ -112,18 +124,6 @@ void dynarr_insert(dynarr_t *arr, size_t idx, void *src)
 
 	// cpy src to idx (which is now undefined)
 	memcpy(arr->_data + (idx * arr->_elt_size), src, arr->_elt_size);
-}
-
-void dynarr_resize(dynarr_t *arr, size_t new_cap)
-{
-	assert(arr != NULL);
-
-	arr->_cap = new_cap;
-	if (new_cap < arr->_count)
-		arr->_count = new_cap;
-
-	arr->_data = realloc(arr->_data, arr->_cap * arr->_elt_size);
-	assert(arr->_data != NULL);
 }
 
 size_t dynarr_count(dynarr_t *arr)

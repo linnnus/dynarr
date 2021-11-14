@@ -45,6 +45,7 @@ typedef struct {
 
 dynarr_t *dynarr_init_count(size_t element_size, size_t initial_cap);
 dynarr_t *dynarr_init(size_t element_size);
+void dynarr_resize(dynarr_t *arr, size_t new_cap);
 void dynarr_free(dynarr_t *arr);
 
 void  dynarr_push(dynarr_t *arr, void *src);
@@ -55,7 +56,6 @@ void *dynarr_get_ptr(dynarr_t *arr, size_t idx);
 void  dynarr_get(dynarr_t *arr, size_t idx, void *dest);
 void  dynarr_insert(dynarr_t *arr, size_t idx, void *src);
 
-void dynarr_resize(dynarr_t *arr, size_t new_cap);
 size_t dynarr_count(dynarr_t *arr);
 
 #endif
