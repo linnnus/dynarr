@@ -4,6 +4,7 @@
 // TODO: let user set malloc/realloc/free
 // TODO: messsages with assert macro?
 // TODO: handle max size
+// TODO: ensure that dynarr_{count,data} are inlined
 
 #include <assert.h> // assert
 #include <stddef.h> // size_t
