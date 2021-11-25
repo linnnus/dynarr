@@ -101,7 +101,7 @@ void dynarr_get(dynarr_t *arr, size_t idx, void *dest)
 	assert(idx < arr->_count);
 	assert(dest != NULL);
 
-	memcpy(dest, arr->_data + idx * arr->_elt_size, arr->_elt_size);
+	memcpy(dest, dynarr_get_ptr(arr, idx), arr->_elt_size);
 }
 
 void dynarr_insert(dynarr_t *arr, size_t idx, void *src)
