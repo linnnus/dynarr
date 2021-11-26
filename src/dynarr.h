@@ -19,21 +19,26 @@
 #define DYNARR_RESIZE_FACTOR 2
 #endif
 
+// _rval variations of all functions that add new data to the array
+
 #define dynarr_push_rval(arr, val) \
 	do { \
 		__auto_type tmp = val; \
+		assert(sizeof(tmp) == arr->_elt_size); \
 		dynarr_push(arr, &tmp); \
 	} while (0)
 
 #define dynarr_set_rval(arr, idx, val) \
 	do { \
 		__auto_type tmp = val; \
+		assert(sizeof(tmp) == arr->_elt_size); \
 		dynarr_set(arr, idx, &tmp); \
 	} while (0)
 
 #define dynarr_insert_rval(arr, idx, val) \
 	do { \
 		__auto_type tmp = val; \
+		assert(sizeof(tmp) == arr->_elt_size); \
 		dynarr_insert(arr, idx, &tmp); \
 	} while (0)
 
