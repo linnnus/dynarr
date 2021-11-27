@@ -38,8 +38,8 @@
 #define DYNARR_RESIZE_FACTOR 2
 #endif
 
-// NOTE: the long names will still be available.
-//       do we want this?
+// TODO: the long names will still be available in the script that defined
+//       DYNARR_SHORT_NAMES.
 
 #ifdef DYNARR_SHORT_NAMES
 #define arrpushr   dynarr_push_rval
@@ -116,16 +116,16 @@ void *dynarr_data(dynarr_t *arr);
 
 dynarr_t *dynarr_init_count(size_t element_size, size_t initial_cap)
 {
-	dynarr_t *ptr = DYNARR_REALLOC(NULL, sizeof(*ptr));
-	DYNARR_ASSERT(ptr != NULL, "realloc (used as malloc) failed");
+	dynarr_t *arr = DYNARR_REALLOC(NULL, sizeof(*arr));
+	DYNARR_ASSERT(arr != NULL, "realloc (used as malloc) failed");
 
-	ptr->_count    = 0;
-	ptr->_cap      = initial_cap;
-	ptr->_elt_size = element_size;
-	ptr->_data     = DYNARR_REALLOC(NULL, ptr->_cap * ptr->_elt_size);
-	DYNARR_ASSERT(ptr->_data != NULL, "realloc (used as malloc) failed");
+	arr->_count    = 0;
+	arr->_cap      = initial_cap;
+	arr->_elt_size = element_size;
+	arr->_data     = DYNARR_REALLOC(NULL, arr->_cap * arr->_elt_size);
+	DYNARR_ASSERT(arr->_data != NULL, "realloc (used as malloc) failed");
 
-	return ptr;
+	return arr;
 }
 
 dynarr_t *dynarr_init(size_t element_size)
