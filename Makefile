@@ -23,7 +23,7 @@ TEST_ARGS=
 
 ### PHONY ###
 
-.PHONY: all test debug clean format dirs
+.PHONY: all test debug clean stb format dirs
 
 all: $(OBJ_DIR)/$(NAME)
 
@@ -37,6 +37,14 @@ format:
 	$(ASTYLE) --style=linux --indent=tab --suffix=none \
 		--max-code-length=80 \
 		$(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.h)
+
+# TODO: remove "// vim:" comments
+stb:
+	cat $(SRC_DIR)/dynarr.h > $(OBJ_DIR)/dynarr.h
+	printf '#ifdef DYNARR_IMPLEMENTATION\n\n' >> $(OBJ_DIR)/dynarr.h
+	tail -n+3 $(SRC_DIR)/dynarr.c >> $(OBJ_DIR)/dynarr.h
+	printf '\n#endif' >> $(OBJ_DIR)/dynarr.h
+
 
 clean:
 	$(RM) $(OBJS) $(DEPS) $(OBJ_DIR)/$(NAME)
