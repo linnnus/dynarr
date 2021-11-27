@@ -38,5 +38,5 @@ format:
 
 dirs: ; @$(MKDIR) $(OBJ_DIR)
 
-$(OBJ_DIR)/$(LIB)_test: $(SRC_DIR)/$(LIB)_test.c $(SRC_DIR)/$(LIB).h
+$(OBJ_DIR)/$(LIB)_test: $(SRC_DIR)/$(LIB)_test.c $(SRC_DIR)/$(LIB).h | dirs
 	$(CC) $(CFLAGS) -c $< -o $@
