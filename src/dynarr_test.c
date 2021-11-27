@@ -1,10 +1,14 @@
 #include "../include/acutest.h"
+
+#define DYNARR_IMPLEMENTATION
 #include "dynarr.h"
 
 // TODO: test missing _rval variations
+// TODO: test custom allocator
+// TODO: test short names
 
 // size to use in loops
-#define TEST_COUNT 100
+#define TEST_COUNT 1000
 
 struct test_struct {
 	size_t a, b, c;
