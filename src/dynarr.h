@@ -1,12 +1,13 @@
 #ifndef DYNARR_H
 #define DYNARR_H
 
-// TODO: messsages with assert macro?
 // TODO: handle max size
 // TODO: ensure that dynarr_{count,data} are inlined
+// TODO: make default DYNARR_ASSERT display more useful information
 
-#include <assert.h> // assert
 #include <stddef.h> // size_t
+#include <stdio.h>  // fprintf
+#include <stdlib.h> // realloc, free, exit, EXIT_FAILURE
 #include <string.h> // memcpy
 
 #if defined(DYNARR_REALLOC) != defined(DYNARR_FREE)
@@ -14,9 +15,19 @@
 #endif
 
 #ifndef DYNARR_REALLOC
-#include <stdlib.h> // realloc, free
 #define DYNARR_REALLOC realloc
 #define DYNARR_FREE    free
+#endif
+
+#ifndef DYNARR_ASSERT
+#define DYNARR_ASSERT(expr, msg) \
+	do { \
+		if (!(expr)) { \
+			fprintf(stderr, "%s(): assertion failed: %s\n", \
+			        __func__, msg); \
+			exit(EXIT_FAILURE); \
+		} \
+	} while (0)
 #endif
 
 #ifndef DYNARR_DEFAULT_CAP
@@ -55,21 +66,24 @@
 #define dynarr_push_rval(arr, val) \
 	do { \
 		__auto_type tmp = val; \
-		assert(sizeof(tmp) == arr->_elt_size); \
+		DYNARR_ASSERT(sizeof(tmp) == arr->_elt_size, \
+		              "size mismatch (__auto_type does not find the correct type)"); \
 		dynarr_push(arr, &tmp); \
 	} while (0)
 
 #define dynarr_set_rval(arr, idx, val) \
 	do { \
 		__auto_type tmp = val; \
-		assert(sizeof(tmp) == arr->_elt_size); \
+		DYNARR_ASSERT(sizeof(tmp) == arr->_elt_size, \
+		              "size mismatch (__auto_type does not find the correct type)"); \
 		dynarr_set(arr, idx, &tmp); \
 	} while (0)
 
 #define dynarr_insert_rval(arr, idx, val) \
 	do { \
 		__auto_type tmp = val; \
-		assert(sizeof(tmp) == arr->_elt_size); \
+		DYNARR_ASSERT(sizeof(tmp) == arr->_elt_size, \
+		              "size mismatch (__auto_type does not find the correct type)"); \
 		dynarr_insert(arr, idx, &tmp); \
 	} while (0)
 
@@ -103,13 +117,13 @@ void *dynarr_data(dynarr_t *arr);
 dynarr_t *dynarr_init_count(size_t element_size, size_t initial_cap)
 {
 	dynarr_t *ptr = DYNARR_REALLOC(NULL, sizeof(*ptr));
-	assert(ptr != NULL);
+	DYNARR_ASSERT(ptr != NULL, "realloc (used as malloc) failed");
 
 	ptr->_count    = 0;
 	ptr->_cap      = initial_cap;
 	ptr->_elt_size = element_size;
 	ptr->_data     = DYNARR_REALLOC(NULL, ptr->_cap * ptr->_elt_size);
-	assert(ptr->_data != NULL);
+	DYNARR_ASSERT(ptr->_data != NULL, "realloc (used as malloc) failed");
 
 	return ptr;
 }
@@ -121,14 +135,14 @@ dynarr_t *dynarr_init(size_t element_size)
 
 void dynarr_resize(dynarr_t *arr, size_t new_cap)
 {
-	assert(arr != NULL);
+	DYNARR_ASSERT(arr != NULL, "arr may not be NULL");
 
 	arr->_cap = new_cap;
 	if (new_cap < arr->_count)
 		arr->_count = new_cap;
 
 	arr->_data = DYNARR_REALLOC(arr->_data, arr->_cap * arr->_elt_size);
-	assert(arr->_data != NULL);
+	DYNARR_ASSERT(arr->_data != NULL, "realloc failed");
 }
 
 void dynarr_free(dynarr_t *arr)
@@ -141,8 +155,8 @@ void dynarr_free(dynarr_t *arr)
 
 void dynarr_push(dynarr_t *arr, void *src)
 {
-	assert(arr != NULL);
-	assert(src != NULL);
+	DYNARR_ASSERT(arr != NULL, "arr may not be NULL");
+	DYNARR_ASSERT(src != NULL, "src may not be NULL");
 
 	// ensure enough space
 	if (arr->_cap < (arr->_count + 1))
@@ -159,8 +173,8 @@ void dynarr_push(dynarr_t *arr, void *src)
 
 void *dynarr_pop_ptr(dynarr_t *arr)
 {
-	assert(arr  != NULL);
-	assert(arr->_count > 0);
+	DYNARR_ASSERT(arr != NULL,     "arr may not be NULL");
+	DYNARR_ASSERT(arr->_count > 0, "cannot pop empty array");
 
 	--arr->_count;
 	return arr->_data + (arr->_count * arr->_elt_size);
@@ -168,18 +182,18 @@ void *dynarr_pop_ptr(dynarr_t *arr)
 
 void dynarr_pop(dynarr_t *arr, void *dest)
 {
-	assert(arr  != NULL);
-	assert(dest != NULL);
-	assert(arr->_count > 0);
+	DYNARR_ASSERT(arr  != NULL,    "arr may not be NULL");
+	DYNARR_ASSERT(dest != NULL,    "dest may not be NULL");
+	DYNARR_ASSERT(arr->_count > 0, "cannot pop empty array");
 
 	memcpy(dest, dynarr_pop_ptr(arr), arr->_elt_size);
 }
 
 void dynarr_set(dynarr_t *arr, size_t idx, void *src)
 {
-	assert(arr != NULL);
-	assert(idx < arr->_cap);
-	assert(src != NULL);
+	DYNARR_ASSERT(arr != NULL,     "arr may not be NULL");
+	DYNARR_ASSERT(idx < arr->_cap, "index out of bounds");
+	DYNARR_ASSERT(src != NULL,     "src may not be NULL");
 
 	if (idx > arr->_count)
 		arr->_count = idx + 1;
@@ -189,26 +203,26 @@ void dynarr_set(dynarr_t *arr, size_t idx, void *src)
 
 void *dynarr_get_ptr(dynarr_t *arr, size_t idx)
 {
-	assert(arr != NULL);
-	assert(idx < arr->_count);
+	DYNARR_ASSERT(arr != NULL,     "arr may not be NULL");
+	DYNARR_ASSERT(idx < arr->_cap, "index out of bounds");
 
 	return arr->_data + idx * arr->_elt_size;
 }
 
 void dynarr_get(dynarr_t *arr, size_t idx, void *dest)
 {
-	assert(arr != NULL);
-	assert(idx < arr->_count);
-	assert(dest != NULL);
+	DYNARR_ASSERT(arr != NULL, "arr may not be NULL");
+	DYNARR_ASSERT(idx < arr->_cap, "index out of bounds");
+	DYNARR_ASSERT(dest != NULL, "dest may not be NULL");
 
 	memcpy(dest, dynarr_get_ptr(arr, idx), arr->_elt_size);
 }
 
 void dynarr_insert(dynarr_t *arr, size_t idx, void *src)
 {
-	assert(arr != NULL);
-	assert(idx < arr->_count);
-	assert(src != NULL);
+	DYNARR_ASSERT(arr != NULL,     "arr may not be NULL");
+	DYNARR_ASSERT(idx < arr->_cap, "index out of bounds");
+	DYNARR_ASSERT(src != NULL,     "src may not be NULL");
 
 	// ensure enough space
 	if (arr->_cap < (arr->_count + 1))
@@ -228,14 +242,14 @@ void dynarr_insert(dynarr_t *arr, size_t idx, void *src)
 
 size_t dynarr_count(dynarr_t *arr)
 {
-	assert(arr != NULL);
+	DYNARR_ASSERT(arr != NULL, "arr may not be NULL");
 
 	return arr->_count;
 }
 
 void *dynarr_data(dynarr_t *arr)
 {
-	assert(arr != NULL);
+	DYNARR_ASSERT(arr != NULL, "arr may not be NULL");
 
 	return arr->_data;
 }

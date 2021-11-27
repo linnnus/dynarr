@@ -5,6 +5,7 @@
 
 // TODO: test missing _rval variations
 // TODO: test custom allocator
+// TODO: test custom assertion function
 // TODO: test short names
 
 // size to use in loops
