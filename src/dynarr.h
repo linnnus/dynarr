@@ -42,29 +42,6 @@
 #define DYNARR_RESIZE_FACTOR 2
 #endif
 
-// TODO: the long names will still be available in the script that defined
-//       DYNARR_SHORT_NAMES.
-
-#ifdef DYNARR_SHORT_NAMES
-#define arrpushr   dynarr_push_rval
-#define arrsetr    dynarr_set_rval
-#define arrinsertr dynarr_insert_rval
-
-#define dynarr_init_count arrinitcnt
-#define dynarr_init       arrinit
-#define dynarr_resize     arrresize
-#define dynarr_free       arrfree
-#define dynarr_push       arrpush
-#define dynarr_pop_ptr    arrpopp
-#define dynarr_pop        arrpop
-#define dynarr_set        arrset
-#define dynarr_get_ptr    arrgetp
-#define dynarr_get        arrget
-#define dynarr_insert     arrinsert
-#define dynarr_count      arrcount
-#define dynarr_data       arrdata
-#endif
-
 // _rval variations of all functions that add new data to the array
 
 #define dynarr_push_rval(arr, val) \
