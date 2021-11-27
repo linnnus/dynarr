@@ -265,19 +265,21 @@ static void test_dynarr_insert_rval()
 }
 
 TEST_LIST = {
-	{ "dynarr_init_count", test_dynarr_init_count },
-	{ "pushing/popping size_t", test_push_size_t },
+	{ "dynarr_init_count",                 test_dynarr_init_count },
+	{ "pushing/popping size_t",            test_push_size_t },
 	{ "pushing/popping size_t using _ptr", test_push_size_t_ptr },
-	{ "pushing/popping struct", test_push_struct },
+	{ "pushing/popping struct",            test_push_struct },
 	{ "pushing/popping struct using _ptr", test_push_struct_ptr },
-	{ "setting/getting size_t", test_set_size_t },
-	{ "setting/getting struct", test_set_struct },
-	{ "dynarr_insert", test_dynarr_insert },
-	{ "dynarr_resize", test_dynarr_resize },
-	{ "dynarr_count", test_dynarr_count },
-	{ "dynarr_data", test_dynarr_data },
-	{ "dynarr_push_rval", test_dynarr_push_rval },
-	{ "dynarr_set_rval", test_dynarr_set_rval },
-	{ "dynarr_insert_rval", test_dynarr_insert_rval },
+	{ "setting/getting size_t",            test_set_size_t },
+	{ "setting/getting struct",            test_set_struct },
+	{ "dynarr_insert",                     test_dynarr_insert },
+	{ "dynarr_resize",                     test_dynarr_resize },
+	{ "dynarr_count",                      test_dynarr_count },
+	{ "dynarr_data",                       test_dynarr_data },
+	{ "dynarr_push_rval",                  test_dynarr_push_rval },
+	{ "dynarr_set_rval",                   test_dynarr_set_rval },
+	{ "dynarr_insert_rval",                test_dynarr_insert_rval },
 	{ NULL, NULL }
 };
+
+// vim: ft=c noet tw=80
