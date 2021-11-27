@@ -20,6 +20,7 @@
 #endif
 
 #ifndef DYNARR_ASSERT
+#ifndef NDEBUG
 #define DYNARR_ASSERT(expr, msg) \
 	do { \
 		if (!(expr)) { \
@@ -28,6 +29,9 @@
 			exit(EXIT_FAILURE); \
 		} \
 	} while (0)
+#else
+#define DYNARR_ASSERT(expr, msg) /* nothing */
+#endif
 #endif
 
 #ifndef DYNARR_DEFAULT_CAP
