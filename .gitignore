@@ -1,4 +1,6 @@
 ### Project Specific ###
+.obj/
+*.orig
 
 ### C ###
 # Prerequisites
